@@ -14,7 +14,6 @@ build.js
 /.fatherrc.ts                             
 /.prettierignore                  
 /.prettierrc
-/.umirc.ts
 tsconfig.json
 yarn-error.log
 yarn.lock
