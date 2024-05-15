@@ -95,19 +95,15 @@ const createFileRouter = async function (
 };
 /** 创建 .lyr */
 export const createLyr = function (rootPath = '', ignorePaths = []) {
-  /** 拷贝文件 */
-  fs.copySync('./template', `${rootPath}/src/.lyr`);
   /** 创建菜单 */
   fs.outputFileSync(
-    `${rootPath}/src/.lyr/store/user.ts`,
-    `import { create } from 'lyr-hooks';
-
-export default create({
-  menus: [
-    {
-      label: "组件",
-      path: '/components',
-      children: [{
+    `${rootPath}/src/.lyr/menus.ts`,
+    `export default [
+  {
+    label: '组件',
+    path: '/components',
+    children: [
+      {
         id: 'user',
         label: 'user',
         path: '/components/user',
@@ -116,11 +112,11 @@ export default create({
         id: 'good',
         label: 'GoodBod',
         path: '/components/good-bod',
-      }]
-    }
-  ],
-});
-  `,
+      },
+    ],
+  },
+];
+`,
   );
   /** 创建路由 */
   createFileRouter(rootPath, ignorePaths, false);

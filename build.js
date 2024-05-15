@@ -11,7 +11,6 @@ exec('tsc -d', (err, stdout) => {
     const files = glob.sync('./dist/**/*.[t]s');
     console.log(chalk.bgCyan('--- build success ----'));
     /** 拷贝模版 */
-    fs.copySync('./code', './dist/code');
     files.forEach((i) => console.log(chalk.cyanBright(i)));
   }
 });
