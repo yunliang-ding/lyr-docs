@@ -5,9 +5,6 @@ src
 /docs
 /runtime
 .logs
-/.dumi
-.umi
-.umi-production
 build.js
 /.github
 /docs-dist
