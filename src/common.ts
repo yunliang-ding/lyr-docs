@@ -33,6 +33,12 @@ export default (config: ConfigProps) =>
     module: {
       rules: [
         {
+          test: /\.md$/,
+          use: {
+            loader: 'raw-loader', // 构建时间缩短一半
+          },
+        },
+        {
           test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           use: {

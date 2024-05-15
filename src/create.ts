@@ -3,8 +3,31 @@ import * as glob from 'glob';
 import * as chokidar from 'chokidar';
 import chalk from 'chalk';
 import { resolve } from 'path';
-import { auth, getIndexHtml, index, type } from './template/code';
-import { ConfigProps } from '../type';
+import { ConfigProps } from './type';
+
+const getIndexHtml = ({
+  favicon,
+  title,
+  script,
+  link,
+  liveReload,
+}) => `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="${favicon}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  ${liveReload}
+  ${link}
+</head>
+
+<body>
+  <div id="root" />
+</body>
+${script}
+</html>`;
 
 const encodeStr = (str) => `#_#${str}#_#`;
 const decodeStr = (str) => str.replaceAll('"#_#', '').replaceAll('#_#"', '');
@@ -48,10 +71,14 @@ const createFileRouter = async function (
         }
         path = filePath.replaceAll('$', ':');
       }
-      importArr.push(`import ${CompName.join('')} from '../../docs${filePath}.md';`); // 添加依赖
+      importArr.push(
+        `import ${CompName.join('')} from '../../docs${filePath}.md';`,
+      ); // 添加依赖
       return {
         path,
-        component: encodeStr(`<MarkdownViewer content={${CompName.join('')}} />`),
+        component: encodeStr(
+          `<MarkdownViewer content={${CompName.join('')}} />`,
+        ),
       };
     });
   const routerConfig = `export default ${decodeStr(
@@ -67,13 +94,34 @@ const createFileRouter = async function (
   fs.outputFile(outputFilePath, content);
 };
 /** 创建 .lyr */
-export const createLyr = function (
-  rootPath = '',
-  ignorePaths = [],
-) {
-  fs.outputFile(`${rootPath}/src/.lyr/index.tsx`, index);
-  fs.outputFile(`${rootPath}/src/.lyr/auth.tsx`, auth);
-  fs.outputFile(`${rootPath}/src/.lyr/type.tsx`, type);
+export const createLyr = function (rootPath = '', ignorePaths = []) {
+  /** 拷贝文件 */
+  fs.copySync('./template', `${rootPath}/src/.lyr`);
+  /** 创建菜单 */
+  fs.outputFileSync(
+    `${rootPath}/src/.lyr/store/user.ts`,
+    `import { create } from 'lyr-hooks';
+
+export default create({
+  menus: [
+    {
+      label: "组件",
+      path: '/components',
+      children: [{
+        id: 'user',
+        label: 'user',
+        path: '/components/user',
+      },
+      {
+        id: 'good',
+        label: 'GoodBod',
+        path: '/components/good-bod',
+      }]
+    }
+  ],
+});
+  `,
+  );
   /** 创建路由 */
   createFileRouter(rootPath, ignorePaths, false);
   /** 监听路由改动 */
