@@ -1,0 +1,60 @@
+{
+  "private": false,
+  "name": "lyr-docs",
+  "version": "0.0.1",
+  "author": "yunliang-ding",
+  "main": "./dist/index.js",
+  "description": "快速搭建 React 组件库文档",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunliang-ding/lyr-docs"
+  },
+  "bin": {
+    "lyr-docs": "./bin/index.js"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@babel/core": "7.23.5",
+    "chalk": "^4.0.0",
+    "glob": "10.3.10",
+    "chokidar": "3.5.3",
+    "fs-extra": "11.2.0",
+    "esbuild-loader": "4.0.2",
+    "css-loader": "6.8.1",
+    "file-loader": "6.2.0",
+    "less": "4.2.0",
+    "less-loader": "11.1.3",
+    "style-loader": "3.3.3",
+    "url-loader": "4.1.1",
+    "ws": "8.16.0",
+    "webpack": "5.89.0",
+    "webpack-dev-server": "4.15.1",
+    "webpack-cli": "5.1.4",
+    "webpackbar": "5.0.2",
+    "babel-preset-env": "1.7.0",
+    "webpack-bundle-analyzer": "4.10.1",
+    "mini-css-extract-plugin": "2.7.6",
+    "thinkjs": "^3.0.0",
+    "think-cache": "^1.0.0",
+    "think-cache-file": "^1.0.8",
+    "think-model": "^1.0.0",
+    "think-model-mysql": "^1.0.0",
+    "think-logger3": "^1.0.0",
+    "think-websocket": "1.0.8",
+    "think-watcher": "^3.0.0"
+  },
+  "resolutions": {
+    "webpack-dev-server": "4.15.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1",
+    "typescript": "5.3.3",
+    "@types/chalk": "2.2.0",
+    "@types/fs-extra": "11.0.4",
+    "@types/webpack-dev-server": "4.7.2",
+    "@types/webpack-bundle-analyzer": "4.6.3"
+  },
+  "license": "MIT"
+}
