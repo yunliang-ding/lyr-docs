@@ -49,11 +49,16 @@ const createFileRouter = async function (
       let CompName: string[] = [];
       let path = '';
       filePath = filePath.substring(0, filePath.lastIndexOf('.'));
+      const originPath = filePath;
       if (filePath === '/index') {
         filePath = '/index';
         path = '/';
         CompName = ['R'];
       } else {
+        if (filePath.endsWith('/index')) {
+          filePath = filePath.substring(0, filePath.length - 6); // 移除 index
+        }
+        path = filePath;
         CompName = `${filePath
           .replaceAll('/', '')
           .replaceAll('$', '')
@@ -66,10 +71,9 @@ const createFileRouter = async function (
         } else {
           CompName.unshift('R');
         }
-        path = filePath.replaceAll('$', ':');
       }
       importArr.push(
-        `import ${CompName.join('')} from '../../docs${filePath}.md';`,
+        `import ${CompName.join('')} from '../../docs${originPath}.md';`,
       ); // 添加依赖
       return {
         path,
