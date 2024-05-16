@@ -2,8 +2,8 @@
 
 - 自动解析 docs 文件夹下的 md 文件，并将渲染的组件，制作成路由
 - md 文件中的组件渲染能力，依赖 MarkdownViewer
-- 同步组件打包的能力，ems\cjs\umd
-- 提高服务快速启动
+- 支持组件打包的能力（ems、cjs、umd）
+- 代码完全cover、方便定制化、务快速启动
 
 # 替换 dumi
 
