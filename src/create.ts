@@ -37,9 +37,14 @@ const createFileRouter = async function (
   ignorePaths,
   sleep = true,
 ) {
+  const packageJson = require(`${rootPath}/package.json`);
+  const libName = packageJson.name.replaceAll('-', '');
   const folder = `${rootPath}/docs/**/*.md`;
   const files = glob.sync(folder);
-  const importArr: any = [`import { MarkdownViewer } from 'lyr-extra';`];
+  const importArr = [
+    `import * as ${libName} from '../index';`,
+    `import { MarkdownViewer } from 'lyr-extra';`,
+];
   const routes = files
     .filter((file) => {
       return !ignorePaths.some((i) => file.includes(i));
@@ -78,7 +83,9 @@ const createFileRouter = async function (
       return {
         path,
         component: encodeStr(
-          `<MarkdownViewer content={${CompName.join('')}} />`,
+          `<MarkdownViewer content={${CompName.join('')}} require={{'${
+            packageJson.name
+          }': ${libName}}} />`,
         ),
       };
     });
@@ -105,16 +112,7 @@ export const createLyr = function (rootPath = '', config: ConfigProps) {
   /** 创建导航 */
   fs.outputFileSync(
     `${rootPath}/src/.lyr/navs.ts`,
-    `export default ${JSON.stringify(
-      (config.navs || []).concat([
-        {
-          title: 'Github',
-          path: packageJson.repository?.url,
-        },
-      ]),
-      null,
-      2,
-    )}`,
+    `export default ${JSON.stringify(config.navs || [], null, 2)}`,
   );
   /** 创建index */
   fs.outputFileSync(
@@ -147,7 +145,12 @@ export interface ConfigProps {
 
 export const defineConfig = (props: ConfigProps) => {};
 
-export const packageName = "${packageJson.name}"
+export const packageName = "${packageJson.name}";
+
+export const favicon = "${config.favicon}";
+
+export const repository = "${packageJson.repository?.url}";
+
 
 `,
   );
