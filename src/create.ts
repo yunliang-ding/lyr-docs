@@ -54,9 +54,6 @@ const createFileRouter = async function (
         path = '/';
         CompName = ['R'];
       } else {
-        if (filePath.endsWith('/index')) {
-          filePath = filePath.substring(0, filePath.length - 6); // 移除 index
-        }
         CompName = `${filePath
           .replaceAll('/', '')
           .replaceAll('$', '')
@@ -94,42 +91,74 @@ const createFileRouter = async function (
   fs.outputFile(outputFilePath, content);
 };
 /** 创建 .lyr */
-export const createLyr = function (rootPath = '', ignorePaths = []) {
+export const createLyr = function (rootPath = '', config: ConfigProps) {
+  const packageJson = require(`${rootPath}/package.json`);
   /** 创建菜单 */
   fs.outputFileSync(
     `${rootPath}/src/.lyr/menus.ts`,
-    `export default [
-  {
-    label: '组件',
-    path: '/components',
-    children: [
-      {
-        id: 'user',
-        label: 'user',
-        path: '/components/user',
-      },
-      {
-        id: 'good',
-        label: 'GoodBod',
-        path: '/components/good-bod',
-      },
-    ],
-  },
-];
+    `export default ${JSON.stringify(config.menus || [], null, 2)}`,
+  );
+  /** 创建导航 */
+  fs.outputFileSync(
+    `${rootPath}/src/.lyr/navs.ts`,
+    `export default ${JSON.stringify(
+      (config.navs || []).concat([
+        {
+          title: 'Github',
+          path: packageJson.repository?.url,
+        },
+      ]),
+      null,
+      2,
+    )}`,
+  );
+  /** 创建index */
+  fs.outputFileSync(
+    `${rootPath}/src/.lyr/index.ts`,
+    `import { Configuration } from 'webpack';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+
+export interface ConfigProps {
+  title?: string;
+  favicon?: string;
+  devScript?: string[];
+  buildScript?: string[];
+  link?: string[];
+  bundleAnalyzer?: BundleAnalyzerPlugin.Options;
+  webpackConfig?: (
+    mode: 'development' | 'production' | undefined,
+  ) => Configuration;
+  serverPath?: string;
+  navs?: {
+    title: string;
+    path: string;
+  }[],
+  menus?: {
+    label: string;
+    path: string;
+    icon?: any,
+    children?: any[]
+  }[];
+};
+
+export const defineConfig = (props: ConfigProps) => {};
+
+export const packageName = "${packageJson.name}"
+
 `,
   );
   /** 创建路由 */
-  createFileRouter(rootPath, ignorePaths, false);
+  createFileRouter(rootPath, [], false);
   /** 监听路由改动 */
   const watcher = chokidar.watch(`${rootPath}/docs/**/*.md`, {
     ignored: /node_modules/,
     ignoreInitial: true,
   });
   watcher.on('add', async () => {
-    createFileRouter(rootPath, ignorePaths);
+    createFileRouter(rootPath, []);
   });
   watcher.on('unlink', async () => {
-    createFileRouter(rootPath, ignorePaths);
+    createFileRouter(rootPath, []);
   });
   console.log(chalk.green('=> create .lyr done.'));
 };

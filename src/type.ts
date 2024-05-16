@@ -22,8 +22,17 @@ export interface ConfigProps {
   ) => Configuration;
   /** 服务端入口，默认 ./src/apis */
   serverPath?: string;
-  /** 阿里云 armsPid */
-  armsPid?: string;
+  /** 导航 */
+  navs?: {
+    title: string;
+    path: string
+  }[],
+  menus?: {
+    label: string;
+    path: string;
+    icon?: any,
+    children?: any[]
+  }[];
   mode?: 'development' | 'production';
   wsPort?: number;
   version?: string;
