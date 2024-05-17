@@ -21,7 +21,7 @@ export default async (rootPath: string, config: ConfigProps) => {
       {
         output: {
           path: resolve('./', './www/dev'),
-          filename: 'app.js',
+          filename: 'index.js',
         },
       } as any,
     ),
@@ -63,10 +63,10 @@ export default async (rootPath: string, config: ConfigProps) => {
         myWs?.send?.(errors.toString());
       } else {
         myWs?.send?.(1);
-        const size = assets['app.js'].size();
+        const size = assets['index.js'].size();
         console.log(
           chalk.green('构建完成'),
-          chalk.gray(`app.js ${Number(size / 1024).toFixed(1)} kb`),
+          chalk.gray(`index.js ${Number(size / 1024).toFixed(1)} kb`),
           chalk.bgMagenta(' Wait '),
           chalk.green('⌛️ Compiling...'),
         );

@@ -176,8 +176,8 @@ export const createIndexHtml = async function (
 ) {
   const mode = config.mode === 'development' ? 'dev' : 'build';
   const cdn = mode === 'dev' ? config.devScript : config.buildScript;
-  const script = [...(cdn || []), `/${mode}/app.js`];
-  const link = [...(config.link || []), `/${mode}/app.css`];
+  const script = [...(cdn || []), `/${mode}/index.js`];
+  const link = [...(config.link || []), `/${mode}/index.css`];
   // 开启 liveReload
   let liveReload = '';
   if (mode === 'dev') {

@@ -4,6 +4,7 @@ import WebpackBar from 'webpackbar';
 import BundleAnalyzer from 'webpack-bundle-analyzer';
 import { ConfigProps } from './type';
 import { Configuration } from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
 
 const _WebpackBar: any = WebpackBar;
 
@@ -84,12 +85,18 @@ export default (config: ConfigProps) =>
         },
       ],
     },
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin({
+        extractComments: false
+      })],
+    },
     plugins: [
       config.bundleAnalyzer && config.mode === 'development'
         ? new BundleAnalyzer.BundleAnalyzerPlugin(config.bundleAnalyzer)
         : undefined,
       new MiniCssExtractPlugin({
-        filename: 'app.css',
+        filename: 'index.css',
       }),
       new _WebpackBar({
         basic: false, // 默认true，启用一个简单的日志报告器
