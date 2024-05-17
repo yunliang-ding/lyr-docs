@@ -11,7 +11,7 @@ const buildESM = async (rootPath: string) => {
   const { exec } = require('child_process');
   console.log(chalk.cyanBright('start building esm...'));
   return new Promise((res) => {
-    exec('tsc -d -p ../', (err, stdout) => {
+    exec('tsc -d', (err, stdout) => {
       if (err) {
         console.log(chalk.bgRed('--- build error ----'));
         console.log(chalk.red(stdout));

@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+import * as path from 'path';
 import * as glob from 'glob';
 import * as chokidar from 'chokidar';
 import chalk from 'chalk';
@@ -42,9 +43,10 @@ const createFileRouter = async function (
   const folder = `${rootPath}/docs/**/*.md`;
   const files = glob.sync(folder);
   const importArr = [
+    `import React from 'react';`,
     `import * as ${libName} from '../index';`,
     `import { MarkdownViewer } from 'lyr-extra';`,
-];
+  ];
   const routes = files
     .filter((file) => {
       return !ignorePaths.some((i) => file.includes(i));
@@ -104,6 +106,8 @@ const createFileRouter = async function (
 /** 创建 .lyr */
 export const createLyr = function (rootPath = '', config: ConfigProps) {
   const packageJson = require(`${rootPath}/package.json`);
+  /** 同步主题 */
+  fs.copySync(path.resolve(__dirname, '../theme'), `${rootPath}/.theme`);
   /** 创建菜单 */
   fs.outputFileSync(
     `${rootPath}/src/.lyr/menus.ts`,
