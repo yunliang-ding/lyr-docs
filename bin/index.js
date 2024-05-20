@@ -44,7 +44,5 @@ if (type !== 'build' && type !== 'docs:build') {
     console.log(chalk.green(`=> use lyr-docs ${version}`));
     lyrConfig.mode = 'production';
     runBuild(rootPath, lyrConfig); // 打包
-  } else if (type === 'docs:build') {
-    console.log(chalk.green(`=> use lyr-docs ${version}`));
   }
 })();
