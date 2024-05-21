@@ -1,7 +1,6 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: monospace;
   div {
     box-sizing: border-box;
   }
@@ -41,7 +40,6 @@ body {
 }
 
 body {
-
   div,
   span,
   td,
@@ -102,12 +100,12 @@ body {
   }
 }
 
-#root>.arco-result-is-500 {
+#root > .arco-result-is-500 {
   position: relative;
   top: 100px;
 }
 
-#root>.arco-spin>.arco-spin-icon>.arco-icon-loading {
+#root > .arco-spin > .arco-spin-icon > .arco-icon-loading {
   font-size: 40px !important;
 }
 
@@ -117,23 +115,31 @@ body {
   }
 }
 
-.app-layout-right-body-footer {
-  height: 0;
+.app-layout {
+  .app-layout-left-logo {
+    h1 {
+      color: #333;
+    }
+  }
+  .app-layout-right-body-footer {
+    display: none !important;
+  }
+  .app-layout-right-body-compact-content {
+    height: 100% !important;
+  }
 }
-
 .markdown-viewer {
   background: var(--color-menu-light-bg);
   padding: 20px 120px;
-  &-code{
+  &-blockquote{
+    margin-bottom: 10px;
+  }
+  &-code {
     margin: 0 !important;
   }
   img {
     width: 100%;
   }
-}
-
-.arco-page-header-content {
-  padding: 0 !important;
 }
 
 .arco-page-header-head-wrapper {
@@ -144,6 +150,6 @@ body {
   height: 100% !important;
 }
 
-.arco-page-header-content{
+.arco-page-header-content {
   background-color: var(--color-menu-light-bg) !important;
 }

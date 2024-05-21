@@ -48,13 +48,13 @@ const createFileRouter = async function (
   const importArr = [
     `import React from 'react';`,
     `import * as ${libName} from '../index';`,
-    `import { MarkdownViewer } from 'lyr-extra';`,
+    `import MarkdownViewer from '../../.theme/markdown-viewer';`,
   ];
   Object.keys(docsRequire).forEach((key) => {
     importArr.push(`import * as ${key} from "${docsRequire[key]}"`);
     _require[docsRequire[key]] = encodeStr(key);
   });
-  const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts`);
+  const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts{,x}`);
   extraRequire.forEach((item) => {
     const packageName = item.replace(rootPath, '../..');
     const pathName = packageName.replace('../../docs', '@');
@@ -161,6 +161,9 @@ export interface ConfigProps {
     icon?: any,
     children?: any[]
   }[];
+  docsRequire: {
+    [key: string]: string
+  },
 };
 
 export const defineConfig = (props: ConfigProps) => {};

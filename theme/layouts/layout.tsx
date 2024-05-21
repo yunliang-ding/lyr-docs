@@ -145,7 +145,7 @@ export default () => {
           uiStore.primaryColor = newColor;
         },
         onDarkChange: (dark) => {
-          // uiStore.dark = dark;
+          uiStore.dark = dark;
         },
         onCompactChange: (compact) => {
           // uiStore.compact = compact;
