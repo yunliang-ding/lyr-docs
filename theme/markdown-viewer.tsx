@@ -15,10 +15,10 @@ export default ({ github, updateTime, ...rest }: any) => {
         }}
       >
         <a href={github} target="_blank">
-          Edit this doc on GitHub
+          在 GitHub 上编辑此页
         </a>
         <span>
-          <a>last Update: </a> {new Date(updateTime).toLocaleString()}
+          <a>最后更新时间: </a> {new Date(updateTime).toLocaleString()}
         </span>
       </div>
     </div>

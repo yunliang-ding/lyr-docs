@@ -68,7 +68,6 @@ const createFileRouter = async function (
   });
   const requireString = decodeStr(JSON.stringify(_require));
   const routes = files.map((file) => {
-    console.log(file);
     let filePath: any = file.split('/docs')[1];
     let CompName: string[] = [];
     let path = '';
