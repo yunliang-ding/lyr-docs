@@ -68,6 +68,7 @@ const createFileRouter = async function (
   });
   const requireString = decodeStr(JSON.stringify(_require));
   const routes = files.map((file) => {
+    console.log(file);
     let filePath: any = file.split('/docs')[1];
     let CompName: string[] = [];
     let path = '';
@@ -95,13 +96,17 @@ const createFileRouter = async function (
         CompName.unshift('R');
       }
     }
+    // 添加依赖
     importArr.push(
       `import ${CompName.join('')} from '../../docs${originPath}.md';`,
-    ); // 添加依赖
+    );
     return {
       path,
       component: encodeStr(
-        `<MarkdownViewer content={${CompName.join(
+        `<MarkdownViewer github='${packageJson.repository?.url}/tree/main${file.replace(
+          rootPath,
+          '',
+        )}' updateTime='${fs.statSync(file).mtime}' content={${CompName.join(
           '',
         )}} require={${requireString.replaceAll('"', "'")}} />`,
       ),
@@ -161,7 +166,7 @@ export interface ConfigProps {
     icon?: any,
     children?: any[]
   }[];
-  docsRequire: {
+  docsRequire?: {
     [key: string]: string
   },
 };

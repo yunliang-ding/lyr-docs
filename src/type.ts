@@ -34,7 +34,7 @@ export interface ConfigProps {
     children?: any[]
   }[];
   /** 代码需要的依赖 */
-  docsRequire: {
+  docsRequire?: {
     [key: string]: string
   },
   mode?: 'development' | 'production';
