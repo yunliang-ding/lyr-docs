@@ -33,6 +33,10 @@ export interface ConfigProps {
     icon?: any,
     children?: any[]
   }[];
+  /** 代码需要的依赖 */
+  docsRequire: {
+    [key: string]: string
+  },
   mode?: 'development' | 'production';
   wsPort?: number;
   version?: string;

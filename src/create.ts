@@ -35,62 +35,78 @@ const decodeStr = (str) => str.replaceAll('"#_#', '').replaceAll('#_#"', '');
 /** 创建文件路由 */
 const createFileRouter = async function (
   rootPath = '',
-  ignorePaths,
+  docsRequire = {},
   sleep = true,
 ) {
   const packageJson = require(`${rootPath}/package.json`);
   const libName = packageJson.name.replaceAll('-', '');
   const folder = `${rootPath}/docs/**/*.md`;
   const files = glob.sync(folder);
+  const _require = {
+    [packageJson.name]: encodeStr(libName),
+  };
   const importArr = [
     `import React from 'react';`,
     `import * as ${libName} from '../index';`,
     `import { MarkdownViewer } from 'lyr-extra';`,
   ];
-  const routes = files
-    .filter((file) => {
-      return !ignorePaths.some((i) => file.includes(i));
-    })
-    .map((file) => {
-      let filePath: any = file.split('/docs')[1];
-      let CompName: string[] = [];
-      let path = '';
-      filePath = filePath.substring(0, filePath.lastIndexOf('.'));
-      const originPath = filePath;
-      if (filePath === '/index') {
-        filePath = '/index';
-        path = '/';
-        CompName = ['R'];
-      } else {
-        if (filePath.endsWith('/index')) {
-          filePath = filePath.substring(0, filePath.length - 6); // 移除 index
-        }
-        path = filePath;
-        CompName = `${filePath
-          .replaceAll('/', '')
-          .replaceAll('$', '')
-          .replaceAll('-', '')
-          .replaceAll('.', '')
-          .replaceAll(' ', '')}`.split('');
-        // 字母开头
-        if (/[a-zA-Z]/.test(CompName[0])) {
-          CompName[0] = CompName[0].toUpperCase();
-        } else {
-          CompName.unshift('R');
-        }
+  Object.keys(docsRequire).forEach((key) => {
+    importArr.push(`import * as ${key} from "${docsRequire[key]}"`);
+    _require[docsRequire[key]] = encodeStr(key);
+  });
+  const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts`);
+  extraRequire.forEach((item) => {
+    const packageName = item.replace(rootPath, '../..');
+    const pathName = packageName.replace('../../docs', '@');
+    const name = pathName
+      .replaceAll('@', '__')
+      .replaceAll('/', '0_0')
+      .replaceAll('.', '1_1')
+      .replaceAll('-', '2_2');
+    importArr.push(`import ${name} from "${packageName}"`);
+    _require[pathName] = encodeStr(name);
+  });
+  const requireString = decodeStr(JSON.stringify(_require));
+  const routes = files.map((file) => {
+    let filePath: any = file.split('/docs')[1];
+    let CompName: string[] = [];
+    let path = '';
+    filePath = filePath.substring(0, filePath.lastIndexOf('.'));
+    const originPath = filePath;
+    if (filePath === '/index') {
+      filePath = '/index';
+      path = '/';
+      CompName = ['R'];
+    } else {
+      if (filePath.endsWith('/index')) {
+        filePath = filePath.substring(0, filePath.length - 6); // 移除 index
       }
-      importArr.push(
-        `import ${CompName.join('')} from '../../docs${originPath}.md';`,
-      ); // 添加依赖
-      return {
-        path,
-        component: encodeStr(
-          `<MarkdownViewer content={${CompName.join('')}} require={{'${
-            packageJson.name
-          }': ${libName}}} />`,
-        ),
-      };
-    });
+      path = filePath;
+      CompName = `${filePath
+        .replaceAll('/', '')
+        .replaceAll('$', '')
+        .replaceAll('-', '')
+        .replaceAll('.', '')
+        .replaceAll(' ', '')}`.split('');
+      // 字母开头
+      if (/[a-zA-Z]/.test(CompName[0])) {
+        CompName[0] = CompName[0].toUpperCase();
+      } else {
+        CompName.unshift('R');
+      }
+    }
+    importArr.push(
+      `import ${CompName.join('')} from '../../docs${originPath}.md';`,
+    ); // 添加依赖
+    return {
+      path,
+      component: encodeStr(
+        `<MarkdownViewer content={${CompName.join(
+          '',
+        )}} require={${requireString.replaceAll('"', "'")}} />`,
+      ),
+    };
+  });
   const routerConfig = `export default ${decodeStr(
     JSON.stringify(routes, null, 2),
   )}`;
@@ -159,7 +175,7 @@ export const repository = "${packageJson.repository?.url}";
 `,
   );
   /** 创建路由 */
-  createFileRouter(rootPath, [], false);
+  createFileRouter(rootPath, config.docsRequire, false);
   /** 监听路由改动 */
   const watcher = chokidar.watch(`${rootPath}/docs/**/*.md`, {
     ignored: /node_modules/,
