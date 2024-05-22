@@ -3,7 +3,6 @@ import { resolve } from 'path';
 import { merge } from 'webpack-merge';
 import common from './common';
 import { ConfigProps } from './type';
-import WebpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
 import chalk from 'chalk';
 import { WebSocketServer } from 'ws';
@@ -31,8 +30,7 @@ export default async (rootPath: string, config: ConfigProps) => {
     chalk.gray(JSON.stringify(compiler.options.externals)),
   );
   // 创建ws
-  const host = await WebpackDevServer.internalIP('v4');
-  const wss = new WebSocketServer({ host, port: config.wsPort });
+  const wss = new WebSocketServer({ host: config.wsHost, port: config.wsPort });
   let myWs;
   wss.on('connection', function connection(ws) {
     myWs = ws; // 赋值
