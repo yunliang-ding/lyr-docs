@@ -83,6 +83,7 @@ export default () => {
             }}
           >
             <p
+              className="package-version"
               style={{
                 display: 'flex',
                 alignItems: 'center',
