@@ -33,11 +33,7 @@ ${script}
 const encodeStr = (str) => `#_#${str}#_#`;
 const decodeStr = (str) => str.replaceAll('"#_#', '').replaceAll('#_#"', '');
 /** 创建文件路由 */
-const createFileRouter = async function (
-  rootPath = '',
-  docsRequire = {},
-  sleep = true,
-) {
+const createFileRouter = async function (rootPath = '', config: ConfigProps = {}, sleep = true) {
   const packageJson = require(`${rootPath}/package.json`);
   const libName = packageJson.name.replaceAll('-', '');
   const folder = `${rootPath}/docs/**/*.md`;
@@ -47,12 +43,15 @@ const createFileRouter = async function (
   };
   const importArr = [
     `import React from 'react';`,
-    `import * as ${libName} from '../index';`,
     `import MarkdownViewer from '../../.theme/markdown-viewer';`,
   ];
-  Object.keys(docsRequire).forEach((key) => {
-    importArr.push(`import * as ${key} from "${docsRequire[key]}"`);
-    _require[docsRequire[key]] = encodeStr(key);
+  // 开启仅站点模式
+  if (config.docsMode !== true) {
+    importArr.push(`import * as ${libName} from '../index';`);
+  }
+  Object.keys(config.docsRequire).forEach((key) => {
+    importArr.push(`import * as ${key} from "${config.docsRequire[key]}"`);
+    _require[config.docsRequire[key]] = encodeStr(key);
   });
   const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts{,x}`);
   extraRequire.forEach((item) => {
@@ -102,12 +101,14 @@ const createFileRouter = async function (
     return {
       path,
       component: encodeStr(
-        `<MarkdownViewer github='${packageJson.repository?.url}/tree/main${file.replace(
-          rootPath,
-          '',
-        )}' updateTime='${fs.statSync(file).mtime}' content={${CompName.join(
-          '',
-        )}} require={${requireString.replaceAll('"', "'")}} />`,
+        `<MarkdownViewer github='${
+          packageJson.repository?.url
+        }/tree/main${file.replace(rootPath, '')}' updateTime='${
+          fs.statSync(file).mtime
+        }' content={${CompName.join('')}} require={${requireString.replaceAll(
+          '"',
+          "'",
+        )}} />`,
       ),
     };
   });
@@ -168,6 +169,7 @@ export interface ConfigProps {
   docsRequire?: {
     [key: string]: string
   },
+  docsMode?: boolean;
 };
 
 export const defineConfig = (props: ConfigProps) => {};
@@ -182,17 +184,17 @@ export const repository = "${packageJson.repository?.url}";
 `,
   );
   /** 创建路由 */
-  createFileRouter(rootPath, config.docsRequire, false);
+  createFileRouter(rootPath, config, false);
   /** 监听路由改动 */
   const watcher = chokidar.watch(`${rootPath}/docs/**/*.md`, {
     ignored: /node_modules/,
     ignoreInitial: true,
   });
   watcher.on('add', async () => {
-    createFileRouter(rootPath, []);
+    createFileRouter(rootPath, config);
   });
   watcher.on('unlink', async () => {
-    createFileRouter(rootPath, []);
+    createFileRouter(rootPath, config);
   });
   console.log(chalk.green('=> create .lyr done.'));
 };

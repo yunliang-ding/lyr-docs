@@ -37,6 +37,8 @@ export interface ConfigProps {
   docsRequire?: {
     [key: string]: string
   },
+  /** 文档站点 */
+  docsMode?: boolean;
   mode?: 'development' | 'production';
   wsPort?: number;
   wsHost?: string;
