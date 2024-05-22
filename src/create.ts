@@ -33,14 +33,16 @@ ${script}
 const encodeStr = (str) => `#_#${str}#_#`;
 const decodeStr = (str) => str.replaceAll('"#_#', '').replaceAll('#_#"', '');
 /** 创建文件路由 */
-const createFileRouter = async function (rootPath = '', config: ConfigProps = {}, sleep = true) {
+const createFileRouter = async function (
+  rootPath = '',
+  config: ConfigProps = {},
+  sleep = true,
+) {
   const packageJson = require(`${rootPath}/package.json`);
   const libName = packageJson.name.replaceAll('-', '');
   const folder = `${rootPath}/docs/**/*.md`;
   const files = glob.sync(folder);
-  const _require = {
-    [packageJson.name]: encodeStr(libName),
-  };
+  const _require = {};
   const importArr = [
     `import React from 'react';`,
     `import MarkdownViewer from '../../.theme/markdown-viewer';`,
@@ -48,10 +50,12 @@ const createFileRouter = async function (rootPath = '', config: ConfigProps = {}
   // 开启仅站点模式
   if (config.docsMode !== true) {
     importArr.push(`import * as ${libName} from '../index';`);
+    _require[packageJson.name] = encodeStr(libName);
   }
-  Object.keys(config.docsRequire).forEach((key) => {
-    importArr.push(`import * as ${key} from "${config.docsRequire[key]}"`);
-    _require[config.docsRequire[key]] = encodeStr(key);
+  const docsRequire = config.docsRequire || {};
+  Object.keys(docsRequire).forEach((key) => {
+    importArr.push(`import * as ${key} from "${docsRequire[key]}"`);
+    _require[docsRequire[key]] = encodeStr(key);
   });
   const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts{,x}`);
   extraRequire.forEach((item) => {
