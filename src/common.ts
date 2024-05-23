@@ -19,6 +19,7 @@ export default (config: ConfigProps) =>
       axios: 'axios',
       react: 'React',
       'lyr-component': 'lyr',
+      'lyr-extra': "lyrExtra",
       'react-dom': 'ReactDOM',
       'react-router-dom': 'ReactRouterDOM',
       '@arco-design/web-react': 'arco',
