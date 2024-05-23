@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { AppLayout, Button } from 'lyr-component';
+import React, { useEffect, useRef } from 'react';
+import { AppLayout } from 'lyr-component';
 import uiStore from '../store/ui';
 import menus from '@/.lyr/menus';
 import navs from '@/.lyr/navs';
 import breadcrumbStore from '../store/breadcrumb';
-import Footer from './footer';
-import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { packageName, favicon, repository } from 'lyr';
 import { IconGithub } from '@arco-design/web-react/icon';
+import { Menu } from '@arco-design/web-react';
 
 export default () => {
   const layoutRef: any = useRef({});
@@ -26,7 +26,7 @@ export default () => {
         breadcrumbStore.breadcrumb = currentBreadcrumb.breadcrumb;
         /** 滚动到顶部 */
         document.querySelector('.markdown-viewer')?.scrollIntoView({
-          // behavior: "smooth"
+          behavior: 'smooth',
         });
       },
     );
@@ -111,35 +111,32 @@ export default () => {
                 />
               </a>
             </p>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {navs.map((item) => {
-                return (
-                  <Button
-                    type="text"
-                    key={item.path}
-                    onClick={() => {
-                      window.open(item.path);
-                    }}
-                    style={{ color: '#666' }}
-                  >
-                    {item.title}
-                  </Button>
-                );
-              })}
-            </div>
             <div>
-              <IconGithub onClick={() => {
-                window.open(repository)
-              }}/>
+              <IconGithub
+                onClick={() => {
+                  window.open(repository);
+                }}
+              />
             </div>
           </div>
         ),
-        droplist: null,
+        droplist:
+          navs.length > 0 ? (
+            <Menu>
+              {navs.map((item) => {
+                return (
+                  <Menu.Item
+                    key={item.title}
+                    onClick={() => {
+                      window.open(item.path);
+                    }}
+                  >
+                    <h4 style={{ margin: 0 }}>{item.title}</h4>
+                  </Menu.Item>
+                );
+              })}
+            </Menu>
+          ) : null,
         avatarUrl: favicon,
         themeColor: primaryColor,
         onThemeColorChange: (newColor) => {
@@ -148,12 +145,9 @@ export default () => {
         onDarkChange: (dark) => {
           uiStore.dark = dark;
         },
-        onCompactChange: (compact) => {
-          // uiStore.compact = compact;
-        },
       }}
       pageHeaderProps={breadcrumb}
-      footerRender={() => <Footer />}
+      footerRender={() => null}
       siderFooterRender={() => null}
     >
       <Outlet />
