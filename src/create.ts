@@ -128,6 +128,21 @@ const createFileRouter = async function (
   }
   fs.outputFile(outputFilePath, content);
 };
+/** 创建docs代码的依赖文件 */
+const createRequireSocure = async function (rootPath: string) {
+  const extraRequire = glob.sync(`${rootPath}/docs/**/*.ts{,x}`);
+  const golbalFiles = {};
+  extraRequire.forEach((item) => {
+    const packageName = item.replace(rootPath, '../..');
+    const pathName = packageName.replace('../../docs', '@');
+    golbalFiles[pathName] = fs.readFileSync(item).toString();
+  });
+  /** 创建菜单 */
+  fs.outputFileSync(
+    `${rootPath}/.theme/markdown-viewer-source.ts`,
+    `export default ${JSON.stringify(golbalFiles || [], null, 2)}`,
+  );
+};
 /** 创建 .lyr */
 export const createLyr = function (rootPath = '', config: ConfigProps) {
   const packageJson = require(`${rootPath}/package.json`);
@@ -187,6 +202,8 @@ export const repository = "${packageJson.repository?.url}";
 
 `,
   );
+  /** 创建依赖描述 */
+  createRequireSocure(rootPath);
   /** 创建路由 */
   createFileRouter(rootPath, config, false);
   /** 监听路由改动 */

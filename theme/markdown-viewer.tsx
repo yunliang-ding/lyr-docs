@@ -1,12 +1,17 @@
 import React from 'react';
 import { MarkdownViewer } from 'lyr-extra';
+import MarkdownViewerSource from './markdown-viewer-source';
 import uiStore from './store/ui';
 
 export default ({ github, updateTime, ...rest }: any) => {
   const { dark } = uiStore.useSnapshot();
   return (
     <div>
-      <MarkdownViewer {...rest} codeTheme={dark ? 'dark' : 'light'} />
+      <MarkdownViewer
+        {...rest}
+        codeTheme={dark ? 'dark' : 'light'}
+        source={MarkdownViewerSource}
+      />
       <div
         style={{
           display: 'flex',

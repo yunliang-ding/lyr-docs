@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "lyr-docs",
-  "version": "0.0.28",
+  "version": "0.0.30",
   "author": "yunliang-ding",
   "main": "./dist/index.js",
   "description": "快速搭建 React 组件库文档",
@@ -56,7 +56,7 @@
     "nprogress": "0.2.0",
     "lyr-component": "^1.0.5",
     "lyr-hooks": "^0.0.3",
-    "lyr-extra": "^0.1.0"
+    "lyr-extra": "^0.1.1"
   },
   "devDependencies": {
     "prettier": "^2.2.1",
