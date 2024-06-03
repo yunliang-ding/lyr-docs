@@ -22,7 +22,7 @@ export default ({ github, updateTime, ...rest }: any) => {
   }, [rest.content, dark, collapsed]);
   return (
     <div>
-      <div style={{ display: 'flex', gap: 10 }}>
+      <div style={{ display: 'flex' }}>
         <div style={{ width: 'calc(100% - 200px)' }}>
           <MarkdownViewer
             {...rest}
@@ -35,7 +35,14 @@ export default ({ github, updateTime, ...rest }: any) => {
         </div>
         <Menu
           defaultSelectedKeys={[defaultSelectedKeys]}
-          style={{ width: 200, position: 'fixed', right: 10, top: 100 }}
+          className="markdown-viewer-navs"
+          style={{
+            width: 200,
+            position: 'fixed',
+            right: 10,
+            top: 100,
+            borderLeft: '1px solid var(--color-fill-3)',
+          }}
         >
           {navs.map((nav: string) => {
             return (
