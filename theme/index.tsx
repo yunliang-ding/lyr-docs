@@ -16,7 +16,10 @@ const App = () => {
         ...item,
         element: item.component,
         errorElement: <ErrorBoundary />,
-      })),
+      })).concat([{
+        path: '*',
+        element: <b>您访问的页面不存在!</b>
+      }]),
     },
   ]);
   return <RouterProvider router={element} />;

@@ -11,6 +11,7 @@ export default ({ github, updateTime, ...rest }: any) => {
         {...rest}
         codeTheme={dark ? 'dark' : 'light'}
         source={MarkdownViewerSource}
+        useNav
       />
       <div
         style={{
