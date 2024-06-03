@@ -148,6 +148,7 @@ export const createLyr = function (rootPath = '', config: ConfigProps) {
   const packageJson = require(`${rootPath}/package.json`);
   /** 同步主题 */
   fs.copySync(path.resolve(__dirname, '../theme'), `${rootPath}/.theme`);
+  console.log(chalk.green('=> create .theme done.'));
   /** 创建菜单 */
   fs.outputFileSync(
     `${rootPath}/src/.lyr/menus.ts`,
