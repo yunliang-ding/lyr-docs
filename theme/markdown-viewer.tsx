@@ -1,18 +1,18 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { MarkdownViewer } from 'lyr-extra';
 import MarkdownViewerSource from './markdown-viewer-source';
 import uiStore from './store/ui';
 import { Menu, BackTop } from '@arco-design/web-react';
 import { IconCaretUp } from '@arco-design/web-react/icon';
-
 export default ({ github, updateTime, ...rest }: any) => {
   const [, setReload] = useState(Math.random());
-  const { dark, collapsed } = uiStore.useSnapshot();
-  const defaultSelectedKeys = decodeURIComponent(location.hash.split('#')[2]);
-  const navs: string[] = useMemo(() => [], [rest.content, dark, collapsed]);
+  const mdRef: any = useRef({});
+  const { dark } = uiStore.useSnapshot();
   useEffect(() => {
-    // 等待解析完毕
-    setReload(Math.random());
+    mdRef.current.setTheme?.(dark ? 'dark' : 'light');
+  }, [dark]);
+  const defaultSelectedKeys = decodeURIComponent(location.hash.split('#')[2]);
+  useEffect(() => {
     if (defaultSelectedKeys) {
       setTimeout(() => {
         document.getElementById(defaultSelectedKeys)?.scrollIntoView({
@@ -20,7 +20,13 @@ export default ({ github, updateTime, ...rest }: any) => {
         });
       }, 100);
     }
-  }, [rest.content, dark, collapsed]);
+  }, []);
+  // 等待 md 解析完毕拿到导航信息再重新render一次
+  useEffect(() => {
+    setTimeout(() => {
+      setReload(Math.random());
+    }, 300);
+  }, [rest.content]);
   return (
     <div
       id="lyr-docs-backtop"
@@ -31,14 +37,17 @@ export default ({ github, updateTime, ...rest }: any) => {
     >
       <div style={{ display: 'flex' }}>
         <div style={{ width: 'calc(100% - 200px)' }}>
-          <MarkdownViewer
-            {...rest}
-            h2Render={(title: string) => {
-              navs.push(title);
-            }}
-            codeTheme={dark ? 'dark' : 'light'}
-            source={MarkdownViewerSource}
-          />
+          {useMemo(
+            () => (
+              <MarkdownViewer
+                {...rest}
+                codeTheme={dark ? 'dark' : 'light'}
+                source={MarkdownViewerSource}
+                ref={mdRef}
+              />
+            ),
+            [rest.content],
+          )}
           <div
             style={{
               display: 'flex',
@@ -63,9 +72,11 @@ export default ({ github, updateTime, ...rest }: any) => {
             right: 10,
             top: 100,
             borderLeft: '1px solid var(--color-fill-3)',
+            height: 'calc(100% - 140px)',
+            overflow: 'auto',
           }}
         >
-          {navs.map((nav: string) => {
+          {mdRef.current.getNavs?.()?.map((nav: string) => {
             return (
               <Menu.Item
                 key={nav}
