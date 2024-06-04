@@ -33,6 +33,7 @@ export default ({ github, updateTime, ...rest }: any) => {
       style={{
         overflow: 'auto',
         height: '100%',
+        backgroundColor: 'var(--color-menu-light-bg)',
       }}
     >
       <div style={{ display: 'flex' }}>
@@ -63,34 +64,27 @@ export default ({ github, updateTime, ...rest }: any) => {
             </span>
           </div>
         </div>
-        <Menu
-          defaultSelectedKeys={[defaultSelectedKeys]}
-          className="markdown-viewer-navs"
-          style={{
-            width: 200,
-            position: 'fixed',
-            right: 10,
-            top: 100,
-            borderLeft: '1px solid var(--color-fill-3)',
-            height: 'calc(100% - 140px)',
-            overflow: 'auto',
-          }}
-        >
-          {mdRef.current.getNavs?.()?.map((nav: string) => {
-            return (
-              <Menu.Item
-                key={nav}
-                onClick={() => {
-                  document.getElementById(nav)?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                }}
-              >
-                {nav}
-              </Menu.Item>
-            );
-          })}
-        </Menu>
+        <div className="markdown-viewer-navs">
+          <Menu
+            defaultSelectedKeys={[defaultSelectedKeys]}
+            style={{ borderLeft: '1px solid var(--color-fill-3)' }}
+          >
+            {mdRef.current.getNavs?.()?.map((nav: string) => {
+              return (
+                <Menu.Item
+                  key={nav}
+                  onClick={() => {
+                    document.getElementById(nav)?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  }}
+                >
+                  {nav}
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </div>
       </div>
       <BackTop
         easing="linear"
