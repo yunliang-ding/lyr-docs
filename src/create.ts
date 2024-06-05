@@ -109,17 +109,19 @@ const createFileRouter = async function (
           packageJson.repository?.url
         }/tree/main${file.replace(rootPath, '')}' updateTime='${
           fs.statSync(file).mtime
-        }' content={${CompName.join('')}} require={${requireString.replaceAll(
-          '"',
-          "'",
-        )}} />`,
+        }' content={${CompName.join('')}} require={mdRequire} />`,
       ),
     };
   });
   const routerConfig = `export default ${decodeStr(
     JSON.stringify(routes, null, 2),
   )}`;
-  const content = `${importArr.join('\n')}\n\n${routerConfig}`;
+  const content = `${importArr.join(
+    '\n',
+  )}\n\nconst mdRequire = ${requireString.replaceAll(
+    '"',
+    "'",
+  )}\n\n${routerConfig};\n`;
   const outputFilePath = resolve(`${rootPath}/src/.lyr/router.tsx`);
   // 为了处理文件重命名的问题，采用了先删除 -> 延迟 -> 创建的兜底方案
   fs.removeSync(outputFilePath);
