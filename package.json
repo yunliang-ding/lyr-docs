@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "lyr-docs",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "author": "yunliang-ding",
   "main": "./dist/index.js",
   "description": "快速搭建 React 组件库文档",
