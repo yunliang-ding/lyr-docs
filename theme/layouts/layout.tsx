@@ -35,6 +35,7 @@ export default () => {
   return (
     <AppLayout
       layoutRef={layoutRef}
+      layout="inline"
       className="lyr-docs-wrap"
       waterMarkProps={{
         gap: [200, 200],

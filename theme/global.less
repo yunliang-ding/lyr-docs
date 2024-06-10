@@ -108,16 +108,21 @@ body {
   font-size: 40px !important;
 }
 
-.lyr-docs-wrap{
-  .app-layout-vertical-right-body-footer {
-    display: none !important;
-  }
-  .app-layout-vertical-right-body-content {
-    padding: 0 !important;
-    height: 100% !important;
-    position: relative;
-  }
+.lyr-docs-wrap
+  > .app-layout-inline-body
+  > .app-layout-inline-body-right
+  > .app-layout-inline-body-right-footer {
+  display: none !important;
 }
+.lyr-docs-wrap
+  > .app-layout-inline-body
+  > .app-layout-inline-body-right
+  > .app-layout-inline-body-right-content {
+  padding: 0 !important;
+  height: 100% !important;
+  position: relative;
+}
+
 .markdown-viewer-navs {
   width: 200px;
   position: absolute;
