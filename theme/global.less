@@ -108,12 +108,15 @@ body {
   font-size: 40px !important;
 }
 
-.lyr-docs-wrap
-  > .app-layout-inline-body
-  > .app-layout-inline-body-right
-  > .app-layout-inline-body-right-footer {
-  display: none !important;
+.lyr-docs-wrap > .app-layout-inline-body > .app-layout-inline-body-right {
+  & > .app-layout-inline-body-right-title {
+    display: none !important;
+  }
+  & > .app-layout-inline-body-right-footer {
+    display: none !important;
+  }
 }
+
 .lyr-docs-wrap
   > .app-layout-inline-body
   > .app-layout-inline-body-right
