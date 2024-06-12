@@ -46,15 +46,7 @@ export default () => {
           fontSize: 12,
         },
       }}
-      logo={
-        <img
-          src={favicon}
-          style={{
-            width: 32,
-            height: 32,
-          }}
-        />
-      }
+      logo={favicon}
       compact={compact}
       collapsed={collapsed}
       onCollapse={setCollapsed}

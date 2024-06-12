@@ -117,6 +117,20 @@ body {
   }
 }
 
+.lyr-docs-wrap.app-layout-collapsed {
+  & > .app-layout-expand-btn {
+    left: 0 !important;
+  }
+  & > .app-layout-inline-body > .app-layout-inline-body-sider {
+    background-color: var(--color-fill-1);
+    border-right: 1px solid var(--color-border);
+    width: 12px;
+    & > .app-layout-inline-body-sider-menu {
+      display: none;
+    }
+  }
+}
+
 .lyr-docs-wrap
   > .app-layout-inline-body
   > .app-layout-inline-body-right
