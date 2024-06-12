@@ -175,8 +175,8 @@ const createComponentTypeMapping = (rootPath: string) => {
     });
   });
   fs.outputFileSync(
-    `${rootPath}/src/.lyr/type-mapping.ts`,
-    `export default ${JSON.stringify(componentInterface, null, 2)}`,
+    `${rootPath}/.theme/markdown-viewer-type.ts`,
+    `export default ${JSON.stringify(componentInterface)}`,
   );
 };
 /** 创建 .lyr */

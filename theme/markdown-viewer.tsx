@@ -1,6 +1,7 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { MarkdownViewer } from 'lyr-extra';
 import MarkdownViewerSource from './markdown-viewer-source';
+import MarkdownViewerType from './markdown-viewer-type';
 import uiStore from './store/ui';
 import { Menu, BackTop } from '@arco-design/web-react';
 import { IconCaretUp } from '@arco-design/web-react/icon';
@@ -44,6 +45,7 @@ export default ({ github, updateTime, ...rest }: any) => {
                 {...rest}
                 codeTheme={dark ? 'dark' : 'light'}
                 source={MarkdownViewerSource}
+                types={MarkdownViewerType}
                 ref={mdRef}
               />
             ),
