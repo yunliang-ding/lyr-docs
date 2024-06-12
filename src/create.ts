@@ -5,6 +5,7 @@ import * as chokidar from 'chokidar';
 import chalk from 'chalk';
 import { resolve } from 'path';
 import { ConfigProps } from './type';
+import { withCustomConfig } from 'react-docgen-typescript';
 
 const getIndexHtml = ({
   favicon,
@@ -160,6 +161,33 @@ export const createLyr = function (rootPath = '', config: ConfigProps) {
   fs.outputFileSync(
     `${rootPath}/src/.lyr/navs.ts`,
     `export default ${JSON.stringify(config.navs || [], null, 2)}`,
+  );
+  /** 生成组件的 interface 描述对象 */
+  const componentInterface = {};
+  const types = glob.sync(`${rootPath}/src/**/*.type.tsx`);
+  const tsconfigPath = path.resolve(process.cwd(), 'tsconfig.json');
+  const parser = withCustomConfig(tsconfigPath, {
+    savePropValueAsString: true,
+    skipChildrenPropWithoutDoc: true,
+  });
+  parser.parse(types).forEach((item: any) => {
+    componentInterface[item.filePath] = [];
+    Object.keys(item.props).forEach((key) => {
+      const p = item.props[key];
+      if (p.description !== '') {
+        componentInterface[item.filePath].push({
+          name: p.name,
+          required: p.required,
+          type: p.type,
+          defaultValue: p.defaultValue,
+          description: p.description,
+        });
+      }
+    });
+  });
+  fs.outputFileSync(
+    `${rootPath}/src/.lyr/typeMapping.ts`,
+    `export default ${JSON.stringify(componentInterface, null, 2)}`,
   );
   /** 创建index */
   fs.outputFileSync(
