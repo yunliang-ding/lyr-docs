@@ -146,6 +146,39 @@ const createRequireSocure = async function (rootPath: string) {
     `export default ${JSON.stringify(golbalFiles || [], null, 2)}`,
   );
 };
+/** 创建组件 interface 描述对象 */
+const createComponentTypeMapping = (rootPath: string) => {
+  const componentInterface = {};
+  const types = glob.sync([
+    `${rootPath}/src/**/*.type.tsx`,
+    `${rootPath}/src/**/type.tsx`,
+  ]);
+  const tsconfigPath = path.resolve(process.cwd(), 'tsconfig.json');
+  const parser = withCustomConfig(tsconfigPath, {
+    savePropValueAsString: true,
+    skipChildrenPropWithoutDoc: true,
+  });
+  parser.parse(types).forEach((item: any) => {
+    const filePath = item.filePath.split(rootPath)[1];
+    componentInterface[filePath] = [];
+    Object.keys(item.props).forEach((key) => {
+      const p = item.props[key];
+      if (p.description !== '') {
+        componentInterface[filePath].push({
+          name: p.name,
+          required: p.required,
+          type: p.type?.name,
+          defaultValue: p.defaultValue,
+          description: p.description,
+        });
+      }
+    });
+  });
+  fs.outputFileSync(
+    `${rootPath}/src/.lyr/type-mapping.ts`,
+    `export default ${JSON.stringify(componentInterface, null, 2)}`,
+  );
+};
 /** 创建 .lyr */
 export const createLyr = function (rootPath = '', config: ConfigProps) {
   const packageJson = require(`${rootPath}/package.json`);
@@ -161,33 +194,6 @@ export const createLyr = function (rootPath = '', config: ConfigProps) {
   fs.outputFileSync(
     `${rootPath}/src/.lyr/navs.ts`,
     `export default ${JSON.stringify(config.navs || [], null, 2)}`,
-  );
-  /** 生成组件的 interface 描述对象 */
-  const componentInterface = {};
-  const types = glob.sync(`${rootPath}/src/**/*.type.tsx`);
-  const tsconfigPath = path.resolve(process.cwd(), 'tsconfig.json');
-  const parser = withCustomConfig(tsconfigPath, {
-    savePropValueAsString: true,
-    skipChildrenPropWithoutDoc: true,
-  });
-  parser.parse(types).forEach((item: any) => {
-    componentInterface[item.filePath] = [];
-    Object.keys(item.props).forEach((key) => {
-      const p = item.props[key];
-      if (p.description !== '') {
-        componentInterface[item.filePath].push({
-          name: p.name,
-          required: p.required,
-          type: p.type,
-          defaultValue: p.defaultValue,
-          description: p.description,
-        });
-      }
-    });
-  });
-  fs.outputFileSync(
-    `${rootPath}/src/.lyr/typeMapping.ts`,
-    `export default ${JSON.stringify(componentInterface, null, 2)}`,
   );
   /** 创建index */
   fs.outputFileSync(
@@ -235,6 +241,22 @@ export const repository = "${packageJson.repository?.url}";
   );
   /** 创建依赖描述 */
   createRequireSocure(rootPath);
+  /** 创建组件 interface 描述对象  */
+  createComponentTypeMapping(rootPath);
+  /** 监听 type 文件改动 */
+  const watcherType = chokidar.watch(
+    [`${rootPath}/src/**/*.type.tsx`, `${rootPath}/src/**/type.tsx`],
+    {
+      ignored: /node_modules/,
+      ignoreInitial: true,
+    },
+  );
+  watcherType.on('change', async () => {
+    createComponentTypeMapping(rootPath);
+  });
+  watcherType.on('add', async () => {
+    createComponentTypeMapping(rootPath);
+  });
   /** 创建路由 */
   createFileRouter(rootPath, config, false);
   /** 监听路由改动 */
