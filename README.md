@@ -1,7 +1,7 @@
 # lyr-docs
 
 - 自动解析 `docs` 文件夹下的 `md` 文件生成路由
-- md 文件中 `React` 组件渲染能力依赖 [MarkdownViewe](https://dev-ops.yunliang.cloud/website/lyr-extra#/components/markdown-viewer)
+- md 文件中 `React` 组件渲染能力依赖 [MarkdownViewer](https://dev-ops.yunliang.cloud/website/lyr-extra#/components/markdown-viewer)
   - 支持在线运行demo
   - 支持解析组件API
 - 舍弃 dumi 多余的特性、仅保留基本的使用习惯
