@@ -180,7 +180,7 @@ const createComponentTypeMapping = (rootPath: string) => {
           name: p.name,
           required: p.required,
           type: p.type?.name,
-          defaultValue: p.defaultValue,
+          defaultValue: p.defaultValue?.value,
           description: p.description,
         });
       }
