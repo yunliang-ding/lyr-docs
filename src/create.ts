@@ -157,6 +157,18 @@ const createComponentTypeMapping = (rootPath: string) => {
   const parser = withCustomConfig(tsconfigPath, {
     savePropValueAsString: true,
     skipChildrenPropWithoutDoc: true,
+    // 过滤继承node_modules
+    propFilter: (prop) => {
+      if (prop.declarations !== undefined && prop.declarations.length > 0) {
+        const hasPropAdditionalDescription = prop.declarations.find(
+          (declaration) => {
+            return !declaration.fileName.includes('node_modules');
+          },
+        );
+        return Boolean(hasPropAdditionalDescription);
+      }
+      return true;
+    },
   });
   parser.parse(types).forEach((item: any) => {
     const filePath = item.filePath.split(rootPath)[1];
