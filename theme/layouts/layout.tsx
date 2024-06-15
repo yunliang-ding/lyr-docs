@@ -13,7 +13,7 @@ import { Menu } from '@arco-design/web-react';
 export default () => {
   const layoutRef: any = useRef({});
   const breadcrumb = breadcrumbStore.useSnapshot();
-  const { dark, compact, collapsed, primaryColor } = uiStore.useSnapshot();
+  const { dark, collapsed, primaryColor } = uiStore.useSnapshot();
   const setCollapsed = (v: boolean) => {
     uiStore.collapsed = v;
   };
@@ -47,7 +47,6 @@ export default () => {
         },
       }}
       logo={favicon}
-      compact={compact}
       collapsed={collapsed}
       onCollapse={setCollapsed}
       title={

@@ -17,5 +17,5 @@ lyr.config.ts
 rollup.config.mjs     
 /www
 /runtime
-/.theme
+/src/.theme
 /apis

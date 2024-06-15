@@ -11,7 +11,7 @@ const _WebpackBar: any = WebpackBar;
 export default (config: ConfigProps) =>
   ({
     mode: config.mode,
-    entry: './.theme/app.tsx',
+    entry: './src/.theme/app.tsx',
     performance: false, // 去掉性能上的警告
     stats: 'errors-only',
     infrastructureLogging: { level: 'error' },

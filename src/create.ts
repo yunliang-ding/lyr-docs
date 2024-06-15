@@ -46,7 +46,7 @@ const createFileRouter = async function (
   const _require = {};
   const importArr = [
     `import React from 'react';`,
-    `import MarkdownViewer from '../../.theme/markdown-viewer';`,
+    `import MarkdownViewer from '../.theme/markdown-viewer';`,
   ];
   // 开启仅站点模式
   if (config.docsMode !== true) {
@@ -142,7 +142,7 @@ const createRequireSocure = async function (rootPath: string) {
   });
   /** 创建菜单 */
   fs.outputFileSync(
-    `${rootPath}/.theme/markdown-viewer-source.ts`,
+    `${rootPath}/src/.theme/markdown-viewer-source.ts`,
     `export default ${JSON.stringify(golbalFiles || [], null, 2)}`,
   );
 };
@@ -187,7 +187,7 @@ const createComponentTypeMapping = (rootPath: string) => {
     });
   });
   fs.outputFileSync(
-    `${rootPath}/.theme/markdown-viewer-type.ts`,
+    `${rootPath}/src/.theme/markdown-viewer-type.ts`,
     `export default ${JSON.stringify(componentInterface)}`,
   );
 };
@@ -195,8 +195,13 @@ const createComponentTypeMapping = (rootPath: string) => {
 export const createLyr = function (rootPath = '', config: ConfigProps) {
   const packageJson = require(`${rootPath}/package.json`);
   /** 同步主题 */
-  fs.copySync(path.resolve(__dirname, '../theme'), `${rootPath}/.theme`);
+  fs.copySync(path.resolve(__dirname, '../theme'), `${rootPath}/src/.theme`);
   console.log(chalk.green('=> create .theme done.'));
+  // 是否存在定制主题
+  if (fs.existsSync(`${rootPath}/.theme`)) {
+    fs.copySync(`${rootPath}/.theme`, `${rootPath}/src/.theme`);
+    console.log(chalk.bgBlue('=> update .theme by customization.'));
+  }
   /** 创建菜单 */
   fs.outputFileSync(
     `${rootPath}/src/.lyr/menus.ts`,
