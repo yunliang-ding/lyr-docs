@@ -13,7 +13,7 @@ import { Menu } from '@arco-design/web-react';
 export default () => {
   const layoutRef: any = useRef({});
   const breadcrumb = breadcrumbStore.useSnapshot();
-  const { dark, collapsed, primaryColor } = uiStore.useSnapshot();
+  const { dark, collapsed, primaryColor, layout } = uiStore.useSnapshot();
   const setCollapsed = (v: boolean) => {
     uiStore.collapsed = v;
   };
@@ -35,7 +35,7 @@ export default () => {
   return (
     <AppLayout
       layoutRef={layoutRef}
-      layout="inline"
+      layout={layout}
       className="lyr-docs-wrap"
       waterMarkProps={{
         gap: [200, 200],
@@ -60,11 +60,22 @@ export default () => {
         </h1>
       }
       dark={dark}
+      onDarkChange={(dark: boolean) => {
+        uiStore.dark = dark;
+      }}
       menu={{
         items: menus as any,
         onClick: ({ path }: any) => {
           location.hash = path;
         },
+      }}
+      themeColor={primaryColor}
+      onSetting={(value: any) => {
+        if (value.themeColor) {
+          uiStore.primaryColor = value.themeColor;
+        } else if (value.layout) {
+          uiStore.layout = value.layout
+        };
       }}
       rightContentProps={{
         extra: (
@@ -131,13 +142,6 @@ export default () => {
             </Menu>
           ) : null,
         avatarUrl: favicon,
-        themeColor: primaryColor,
-        onThemeColorChange: (newColor) => {
-          uiStore.primaryColor = newColor;
-        },
-        onDarkChange: (dark) => {
-          uiStore.dark = dark;
-        },
       }}
       pageHeaderProps={breadcrumb}
       footerRender={() => null}

@@ -5,4 +5,5 @@ export default create({
   primaryColor: '#165dff',
   collapsed: false,
   dark: false,
+  layout: "vertical"
 });
