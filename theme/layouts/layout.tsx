@@ -61,6 +61,7 @@ export default () => {
       }
       dark={dark}
       onDarkChange={(dark: boolean) => {
+        (window as any).monaco?.editor.setTheme(dark ? "vs-dark" : "vs");
         uiStore.dark = dark;
       }}
       menu={{
@@ -73,9 +74,7 @@ export default () => {
       onSetting={(value: any) => {
         if (value.themeColor) {
           uiStore.primaryColor = value.themeColor;
-        } else if (value.layout) {
-          uiStore.layout = value.layout
-        };
+        }
       }}
       rightContentProps={{
         extra: (
