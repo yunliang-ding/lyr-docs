@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Layout from './layout';
 import uiStore from '../store/ui';
 import { generate, getRgbStr } from '@arco-design/color';
@@ -25,10 +25,18 @@ export default () => {
       const rgbStr = getRgbStr(l);
       document.body.style.setProperty(`--arcoblue-${index + 1}`, rgbStr);
     });
-    uiStore.primaryColor = newColor || "";
+    uiStore.primaryColor = newColor || '';
   };
   useEffect(() => {
     setTheme(uiStore.primaryColor);
   }, [uiStore.primaryColor]);
-  return <Layout />;
+  return (
+    <>
+      <div style={{ display: 'none' }}>
+        {/* @ts-ignore */}
+        <window.lyrCodeEditor.CodeEditor />
+      </div>
+      <Layout />
+    </>
+  );
 };

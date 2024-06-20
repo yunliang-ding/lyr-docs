@@ -18,8 +18,9 @@ export default (config: ConfigProps) =>
     externals: {
       axios: 'axios',
       react: 'React',
-      'lyr-component': 'lyr',
       'lyr-extra': "lyrExtra",
+      'lyr-component': 'lyr',
+      'lyr-code-editor': "lyrCodeEditor",
       'react-dom': 'ReactDOM',
       'react-router-dom': 'ReactRouterDOM',
       '@arco-design/web-react': 'arco',
