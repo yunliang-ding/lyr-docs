@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import Layout from './layout';
 import uiStore from '../store/ui';
 import { generate, getRgbStr } from '@arco-design/color';
+import { CodeEditor } from 'lyr-code-editor';
 
 export default () => {
   const { dark } = uiStore.useSnapshot();
@@ -33,8 +34,7 @@ export default () => {
   return (
     <>
       <div style={{ display: 'none' }}>
-        {/* @ts-ignore */}
-        <window.lyrCodeEditor.CodeEditor />
+        <CodeEditor />
       </div>
       <Layout />
     </>

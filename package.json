@@ -56,8 +56,9 @@
     "react-router-dom": "6.20.0",
     "@arco-design/web-react": "2.58.2",
     "nprogress": "0.2.0",
-    "lyr-component": "^1.0.5",
     "lyr-hooks": "^0.0.3",
+    "lyr-component": "^1.0.5",
+    "lyr-code-editor": "^1.0.4",
     "lyr-extra": "^0.1.1"
   },
   "devDependencies": {
