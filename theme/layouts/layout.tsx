@@ -61,7 +61,6 @@ export default () => {
       }
       dark={dark}
       onDarkChange={(dark: boolean) => {
-        (window as any).monaco?.editor.setTheme(dark ? "vs-dark" : "vs");
         uiStore.dark = dark;
       }}
       menu={{
