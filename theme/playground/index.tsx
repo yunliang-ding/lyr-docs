@@ -73,7 +73,10 @@ export default () => {
               setReset={setReset}
             />
           ),
-          <div key={reload} style={{ padding: 16, background: '#fcfcfc' }}>
+          <div
+            key={reload}
+            style={{ padding: 16, background: '#fff', height: '100vh' }}
+          >
             {VNode}
           </div>,
         ]}

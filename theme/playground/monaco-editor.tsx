@@ -1,5 +1,5 @@
-import { CodeEditor } from 'lyr-code-editor';
 import React, { useRef, useState } from 'react';
+import { CodeEditor } from 'lyr-code-editor';
 import Tabs from './tabs';
 
 export default ({
@@ -37,7 +37,7 @@ export default ({
             require={require}
             style={{
               display: tab === selectedTab ? 'block' : 'none',
-              height: "100vh",
+              height: "calc(100vh - 57px)",
             }}
             value={String(
               index === 0 ? code.value : sourceCode.value[tab],
