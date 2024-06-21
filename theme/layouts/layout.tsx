@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React, { useEffect, useRef } from 'react';
 import { AppLayout } from 'lyr-component';
+import { asyncLoadLink } from 'lyr-extra';
 import uiStore from '../store/ui';
 import menus from '@/.lyr/menus';
 import navs from '@/.lyr/navs';
@@ -13,7 +14,7 @@ import { Menu } from '@arco-design/web-react';
 export default () => {
   const layoutRef: any = useRef({});
   const breadcrumb = breadcrumbStore.useSnapshot();
-  const { dark, collapsed, primaryColor, layout } = uiStore.useSnapshot();
+  const { dark, collapsed, primaryColor } = uiStore.useSnapshot();
   const setCollapsed = (v: boolean) => {
     uiStore.collapsed = v;
   };
@@ -61,6 +62,11 @@ export default () => {
       }
       dark={dark}
       onDarkChange={(dark: boolean) => {
+        asyncLoadLink(
+          `https://lyr-cli-oss.oss-cn-beijing.aliyuncs.com/cdn/highlight.atom-one-${
+            dark ? 'dark' : 'light'
+          }.min.css`,
+        );
         uiStore.dark = dark;
       }}
       menu={{
@@ -143,7 +149,46 @@ export default () => {
       }}
       pageHeaderProps={breadcrumb}
       footerRender={() => null}
-      siderFooterRender={() => null}
+      siderFooterRender={() => (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderTop: '1px solid var(--color-fill-3)',
+          }}
+        >
+          @ design by
+          <a
+            style={{ marginLeft: 8 }}
+            target="_blank"
+            href="https://github.com/yunliang-ding/lyr-docs"
+          >
+            lyr-docs
+            <svg
+              viewBox="0 0 100 100"
+              width="15"
+              height="15"
+              style={{
+                position: 'relative',
+                top: 3,
+                marginLeft: 4,
+              }}
+            >
+              <path
+                fill="currentColor"
+                d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+              ></path>
+              <polygon
+                fill="currentColor"
+                points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+              ></polygon>
+            </svg>
+          </a>
+        </div>
+      )}
     >
       <Outlet />
     </AppLayout>
