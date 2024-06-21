@@ -61,8 +61,8 @@ export default () => {
         </h1>
       }
       dark={dark}
-      onDarkChange={(dark: boolean) => {
-        asyncLoadLink(
+      onDarkChange={async (dark: boolean) => {
+        await asyncLoadLink(
           `https://lyr-cli-oss.oss-cn-beijing.aliyuncs.com/cdn/highlight.atom-one-${
             dark ? 'dark' : 'light'
           }.min.css`,

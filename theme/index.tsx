@@ -1,7 +1,9 @@
+import React from 'react';
 import ReactDom from 'react-dom';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Layout from './layouts/index';
 import ErrorBoundary from './error-boundary';
+import Playground from './playground';
 import router from '@/.lyr/router';
 import ConfigProps from './type';
 import './global.less';
@@ -24,6 +26,11 @@ const App = () => {
             element: <h3 style={{ paddingLeft: 10 }}>您访问的页面不存在!</h3>,
           },
         ]),
+    },
+    {
+      path: '/~playground',
+      element: <Playground />,
+      errorElement: <ErrorBoundary />,
     },
   ]);
   return <RouterProvider router={element} />;

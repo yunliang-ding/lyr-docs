@@ -119,7 +119,7 @@ const createFileRouter = async function (
   )}`;
   const content = `${importArr.join(
     '\n',
-  )}\n\nconst mdRequire = ${requireString.replaceAll(
+  )}\n\nexport const mdRequire = ${requireString.replaceAll(
     '"',
     "'",
   )}\n\n${routerConfig};\n`;
