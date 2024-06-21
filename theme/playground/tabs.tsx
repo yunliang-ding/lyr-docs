@@ -1,5 +1,5 @@
-import { Tooltip } from '@arco-design/web-react';
 import React from 'react';
+import { Tooltip } from '@arco-design/web-react';
 
 export default ({
   tabs = [],
@@ -10,7 +10,7 @@ export default ({
 }) => {
   return (
     <>
-      <div className="markdown-viewer-code-wrap-footer-tabs">
+      <div className="demos-playground-tabs">
         <div
           style={{
             display: 'flex',
@@ -26,8 +26,8 @@ export default ({
                 key={tab}
                 className={
                   tab === selectedTab
-                    ? 'markdown-viewer-code-wrap-footer-tabs-tab markdown-viewer-code-wrap-footer-tabs-tab-selected'
-                    : 'markdown-viewer-code-wrap-footer-tabs-tab'
+                    ? 'demos-playground-tabs-tab demos-playground-tabs-tab-selected'
+                    : 'demos-playground-tabs-tab'
                 }
                 onClick={() => {
                   onClick(tab);
@@ -74,11 +74,11 @@ export default ({
           </Tooltip>
         </div>
       </div>
-      <div className="markdown-viewer-code-wrap-footer-breadcrumbs">
+      <div className="demos-playground-breadcrumbs">
         {['#', '~playground', modalName].map((i) => {
           return (
             <div
-              className="markdown-viewer-code-wrap-footer-breadcrumbs-dir"
+              className="demos-playground-breadcrumbs-dir"
               key={i}
             >
               {i}
@@ -99,7 +99,7 @@ export default ({
             </div>
           );
         })}
-        <div className="markdown-viewer-code-wrap-footer-breadcrumbs-dir">
+        <div className="demos-playground-breadcrumbs-dir">
           <i className="file-icon typescriptreact-lang-file-icon" />
           <span style={{ color: 'var(--vscode-icon-foreground)' }}>
             {selectedTab}
