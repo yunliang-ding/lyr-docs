@@ -1,10 +1,11 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { MarkdownViewer } from 'lyr-extra';
+import { MarkdownViewer, encode } from 'lyr-extra';
 import MarkdownViewerSource from './markdown-viewer-source';
 import MarkdownViewerType from './markdown-viewer-type';
-import uiStore from './store/ui';
-import { Menu, BackTop } from '@arco-design/web-react';
+import { Menu, BackTop, Tooltip } from '@arco-design/web-react';
 import { IconCaretUp } from '@arco-design/web-react/icon';
+import uiStore from './store/ui';
+
 export default ({ github, updateTime, ...rest }: any) => {
   const [, setReload] = useState(Math.random());
   const mdRef: any = useRef({});
@@ -45,8 +46,36 @@ export default ({ github, updateTime, ...rest }: any) => {
                 {...rest}
                 codeTheme={dark ? 'dark' : 'light'}
                 source={MarkdownViewerSource}
-                types={MarkdownViewerType}
+                typesAPI={MarkdownViewerType}
                 ref={mdRef}
+                extraRender={({ tabs, code }: any) => {
+                  return (
+                    <Tooltip content="打开 Playground ">
+                      <svg
+                        viewBox="0 0 1024 1024"
+                        width="16"
+                        height="16"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          const params = encode(
+                            JSON.stringify({
+                              tabs,
+                              code,
+                            }),
+                          );
+                          window.open(
+                            `${location.pathname}#/~playground?params=${params}`,
+                          );
+                        }}
+                      >
+                        <path
+                          d="M665.088 131.584L354.304 415.744 220.16 314.368c-11.264-8.704-27.136-8.192-38.4 0.512L133.12 354.304c-14.848 11.776-15.36 34.304-1.536 47.104L250.88 510.464 131.584 619.52c-14.336 12.8-13.312 35.328 1.536 47.104l48.64 39.424c11.264 9.216 27.136 9.216 38.4 0.512l134.144-101.376 310.784 284.672c17.92 16.384 44.032 19.456 65.536 8.192l147.968-79.36c18.432-9.728 30.208-29.184 30.208-50.176V252.928c0-20.992-11.776-40.448-30.208-50.176l-147.968-79.36c-21.504-11.264-47.616-8.192-65.536 8.192z m-185.856 378.88l233.984-177.152v354.816L479.232 510.464z"
+                          fill="#8a8a8a"
+                        />
+                      </svg>
+                    </Tooltip>
+                  );
+                }}
               />
             ),
             [rest.content],

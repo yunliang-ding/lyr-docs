@@ -3,16 +3,17 @@ import { ResizeBox } from '@arco-design/web-react';
 import MonacoEditor from './monaco-editor';
 import { decode, babelParse, getUrlSearchParams } from 'lyr-extra';
 import { mdRequire } from '../../.lyr/router';
+import markdownViewerSource from '../markdown-viewer-source';
 import './index.less';
 
 export default () => {
   const { params }: any = getUrlSearchParams(location.hash);
-  const { tabs, code, source } = JSON.parse(decode(params));
+  const { tabs, code } = JSON.parse(decode(params));
   const [spin, setSpin] = useState(true);
   const [reload, setReload] = useState(Math.random());
   const [updateRequire] = useState({});
   const [innerCode] = useState({ value: code });
-  const [innerSourceCode] = useState({ value: source });
+  const [innerSourceCode] = useState({ value: markdownViewerSource });
   const [reset, setReset] = useState(Math.random());
   const Comp = useMemo(() => {
     return babelParse({
@@ -32,7 +33,7 @@ export default () => {
   }, [reload]);
   useEffect(() => {
     innerCode.value = code;
-    innerSourceCode.value = source;
+    innerSourceCode.value = markdownViewerSource;
     tabs.forEach((tab) => {
       delete updateRequire[tab];
     });
@@ -72,7 +73,9 @@ export default () => {
               setReset={setReset}
             />
           ),
-          <div key={reload}>{VNode}</div>,
+          <div key={reload} style={{ padding: 16, background: '#fcfcfc' }}>
+            {VNode}
+          </div>,
         ]}
       />
     </div>
