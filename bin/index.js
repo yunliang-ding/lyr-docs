@@ -12,7 +12,7 @@ const {
 /** 解析配置文件 ./lry.config.ts */
 const lyrConfig = getUserConfig().default;
 const rootPath = process.cwd();
-const APP_PATH = `${rootPath}/${lyrConfig.serverPath || 'src/apis'}`;
+const APP_PATH = `${rootPath}/apis'}`;
 lyrConfig.version = version;
 const type = process.argv.pop();
 // 在这里启动 thinkjs 服务
