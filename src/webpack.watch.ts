@@ -41,12 +41,15 @@ export default async (rootPath: string, config: ConfigProps) => {
     ignoreInitial: true,
   });
   chokidarWatcher.on('change', () => {
-    const config: any = getUserConfig().default;
-    if (config) {
+    const newConfig: any = getUserConfig().default;
+    if (newConfig) {
       console.log(chalk.magentaBright(`=> 配置文件改动，正在重新编译.`));
-      config.mode = 'development';
-      createLyr(rootPath, config); // 创建 src/.lyr
-      createIndexHtml(rootPath, config); // 创建 index.html
+      const mergeConfig = {
+        ...config,
+        ...newConfig,
+      }
+      createLyr(rootPath, mergeConfig); // 创建 src/.lyr
+      createIndexHtml(rootPath, mergeConfig); // 创建 index.html
       myWs?.send?.(1);
     }
   });

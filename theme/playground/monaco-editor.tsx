@@ -14,7 +14,7 @@ export default ({
   const refArr = tabs.map(() => useRef({}));
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   return (
-    <div className="markdown-viewer-code-wrap-footer monaco-component show-file-icons">
+    <div className="monaco-component show-file-icons">
       <Tabs
         tabs={tabs}
         resetCode={() => {
