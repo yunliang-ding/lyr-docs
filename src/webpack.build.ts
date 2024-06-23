@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { merge } from 'webpack-merge';
 import common from './common';
 import { ConfigProps } from './type';
+import { writeFileSync, readFileSync } from 'fs-extra';
 import webpack from 'webpack';
 import chalk from 'chalk';
 import { createLyr, createIndexHtml } from '.';
@@ -39,6 +40,13 @@ export default (rootPath: string, config: ConfigProps) => {
               ).toFixed(1)} kb`,
             ),
           );
+        }
+        // 插入加载脚本
+        if (key === 'index.js') {
+          const filePath = resolve('./', './www/build/index.js');
+          const content = readFileSync(filePath);
+          const newContent = `(async function(link,script){await Promise.all(link.map((href)=>{return new Promise((resolve,reject)=>{const link=document.createElement('link');link.type='text/css';link.rel='stylesheet';link.href=href;document.head.appendChild(link);link.onload=()=>{resolve(true)};link.onerror=(err)=>{reject(err)}})}));const asyncLoadScript=(src)=>{return new Promise((resolve,reject)=>{const script=document.createElement('script');script.type='text/javascript';script.src=src;script.crossOrigin='';document.body.appendChild(script);script.onload=()=>{resolve(true)};script.onerror=(err)=>{reject(err)}})};for(let i=0;i<script.length;i++){await asyncLoadScript(script[i])};${content.toString()}})(${JSON.stringify(config.link)},${JSON.stringify(config.buildScript)})`;
+          writeFileSync(resolve('./', './www/build/index.js'), newContent);
         }
       });
       process.exit(0); // 退出
