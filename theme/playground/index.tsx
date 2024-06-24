@@ -1,10 +1,29 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ResizeBox } from '@arco-design/web-react';
 import MonacoEditor from './monaco-editor';
 import { decode, babelParse, getUrlSearchParams } from 'lyr-extra';
 import { mdRequire } from '../../.lyr/router';
 import markdownViewerSource from '../markdown-viewer-source';
 import './index.less';
+
+const RenderEditComponent = (props: {
+  code: string;
+  require: any;
+  onRequire: any;
+}) => {
+  const Component = babelParse({
+    code: props.code,
+    require: props.require,
+    onRequire: props.onRequire,
+  });
+  let VNode: any = null;
+  try {
+    VNode = Component();
+  } catch (error) {
+    VNode = <pre style={{ color: 'red', margin: 0 }}>{String(error)}</pre>;
+  }
+  return VNode;
+};
 
 export default () => {
   const { params }: any = getUrlSearchParams(location.hash);
@@ -15,26 +34,10 @@ export default () => {
   const [innerCode] = useState({ value: code });
   const [innerSourceCode] = useState({ value: markdownViewerSource });
   const [reset, setReset] = useState(Math.random());
-  const Comp = useMemo(() => {
-    return babelParse({
-      code: innerCode.value,
-      require: {
-        ...mdRequire,
-        ...updateRequire,
-      },
-      onRequire: (requireName: string) => {
-        if (requireName.endsWith('.ts') || requireName.endsWith('.tsx')) {
-          if (!tabs.includes(requireName)) {
-            tabs.push(requireName);
-          }
-        }
-      },
-    });
-  }, [reload]);
   useEffect(() => {
     innerCode.value = code;
     innerSourceCode.value = markdownViewerSource;
-    tabs.forEach((tab) => {
+    tabs.forEach((tab: string) => {
       delete updateRequire[tab];
     });
     setReload(Math.random());
@@ -44,12 +47,6 @@ export default () => {
       setSpin(false);
     });
   }, []);
-  let VNode: any = null;
-  try {
-    VNode = Comp();
-  } catch (error) {
-    VNode = <pre style={{ color: 'red', margin: 0 }}>{String(error)}</pre>;
-  }
   return (
     <div className="demos-playground">
       <ResizeBox.Split
@@ -77,7 +74,23 @@ export default () => {
             key={reload}
             style={{ padding: 16, background: '#fff', height: '100vh' }}
           >
-            {VNode}
+            <RenderEditComponent
+              code={innerCode.value}
+              require={{
+                ...mdRequire,
+                ...updateRequire,
+              }}
+              onRequire={(requireName: string) => {
+                if (
+                  requireName.endsWith('.ts') ||
+                  requireName.endsWith('.tsx')
+                ) {
+                  if (!tabs.includes(requireName)) {
+                    tabs.push(requireName);
+                  }
+                }
+              }}
+            />
           </div>,
         ]}
       />
