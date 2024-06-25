@@ -57,9 +57,11 @@ export default ({ github, updateTime, ...rest }: any) => {
                         height="16"
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
+                          const dependencies = {};
+                          Object.keys(tabs).forEach(key => dependencies[key] = MarkdownViewerSource[key])
                           const params = encode(
                             JSON.stringify({
-                              tabs,
+                              dependencies,
                               code,
                             }),
                           );
