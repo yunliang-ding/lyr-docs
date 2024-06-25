@@ -5,7 +5,7 @@ import Layout from './layouts/index';
 import ErrorBoundary from './error-boundary';
 import Playground from './playground';
 import router from '@/.lyr/router';
-import ConfigProps from './type';
+import ConfigProps from 'lyr';
 import './global.less';
 
 const App = () => {

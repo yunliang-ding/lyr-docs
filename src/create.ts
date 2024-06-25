@@ -10,6 +10,7 @@ import { withCustomConfig } from 'react-docgen-typescript';
 const getIndexHtml = ({
   favicon,
   title,
+  spin = '<div style="display:flex;align-items:center;height:100vh;width:100vw;justify-content:center;font-size: 18px !important;">loading...</div>',
   script,
   link,
   liveReload,
@@ -26,7 +27,9 @@ const getIndexHtml = ({
 </head>
 
 <body>
-  <div id="root" />
+  <div id="root">
+    ${spin}
+  <div>
 </body>
 ${script}
 </html>`;
@@ -213,37 +216,10 @@ export const createLyr = function (rootPath = '', config: ConfigProps) {
     `export default ${JSON.stringify(config.navs || [], null, 2)}`,
   );
   /** 创建index */
+  const configPropsString = fs.readFileSync(`${__dirname}/type.d.ts`);
   fs.outputFileSync(
     `${rootPath}/src/.lyr/index.ts`,
-    `import { Configuration } from 'webpack';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-
-export interface ConfigProps {
-  title?: string;
-  favicon?: string;
-  devScript?: string[];
-  buildScript?: string[];
-  link?: string[];
-  bundleAnalyzer?: BundleAnalyzerPlugin.Options;
-  webpackConfig?: (
-    mode: 'development' | 'production' | undefined,
-  ) => Configuration;
-  serverPath?: string;
-  navs?: {
-    title: string;
-    path: string;
-  }[],
-  menus?: {
-    label: string;
-    path: string;
-    icon?: any,
-    children?: any[]
-  }[];
-  docsRequire?: {
-    [key: string]: string
-  },
-  docsMode?: boolean;
-};
+    `${configPropsString.toString()}
 
 export const defineConfig = (props: ConfigProps) => {};
 
@@ -296,8 +272,14 @@ export const createIndexHtml = async function (
 ) {
   const mode = config.mode === 'development' ? 'dev' : 'build';
   const cdn = mode === 'dev' ? config.devScript : config.buildScript;
-  const script = mode === 'dev' ? [...(cdn || []), `/${mode}/index.js`] : [`/${mode}/index.js`];
-  const link = mode === 'dev' ? [...(config.link || []), `/${mode}/index.css`] : [`/${mode}/index.css`]
+  const script =
+    mode === 'dev'
+      ? [...(cdn || []), `/${mode}/index.js`]
+      : [`/${mode}/index.js`];
+  const link =
+    mode === 'dev'
+      ? [...(config.link || []), `/${mode}/index.css`]
+      : [`/${mode}/index.css`];
   // 开启 liveReload
   let liveReload = '';
   if (mode === 'dev') {
@@ -332,6 +314,7 @@ export const createIndexHtml = async function (
   const content = getIndexHtml({
     favicon: config.favicon,
     title: config.title,
+    spin: config.spin,
     link: link
       .map((i) => `<link rel="stylesheet" type="text/css" href="${i}" />`)
       .join('\n'),

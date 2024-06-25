@@ -4,6 +4,8 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 export interface ConfigProps {
   /** 标题 */
   title?: string;
+  /** 页面渲染前的展示 */
+  spin?: string;
   /** icon */
   favicon?: string;
   /** 开发环境 script */
