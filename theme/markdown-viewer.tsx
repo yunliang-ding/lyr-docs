@@ -50,34 +50,57 @@ export default ({ github, updateTime, ...rest }: any) => {
                 ref={mdRef}
                 extraRender={({ tabs, code }: any) => {
                   return (
-                    <Tooltip content="打开 Playground ">
-                      <svg
-                        viewBox="0 0 1024 1024"
-                        width="16"
-                        height="16"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          const dependencies = {};
-                          tabs.forEach((key: string) => {
-                            dependencies[key] = MarkdownViewerSource[key]
-                          })
-                          const params = encode(
-                            JSON.stringify({
-                              dependencies,
-                              code,
-                            }),
-                          );
-                          window.open(
-                            `${location.pathname}#/~playground?params=${params}`,
-                          );
-                        }}
-                      >
-                        <path
-                          d="M665.088 131.584L354.304 415.744 220.16 314.368c-11.264-8.704-27.136-8.192-38.4 0.512L133.12 354.304c-14.848 11.776-15.36 34.304-1.536 47.104L250.88 510.464 131.584 619.52c-14.336 12.8-13.312 35.328 1.536 47.104l48.64 39.424c11.264 9.216 27.136 9.216 38.4 0.512l134.144-101.376 310.784 284.672c17.92 16.384 44.032 19.456 65.536 8.192l147.968-79.36c18.432-9.728 30.208-29.184 30.208-50.176V252.928c0-20.992-11.776-40.448-30.208-50.176l-147.968-79.36c-21.504-11.264-47.616-8.192-65.536 8.192z m-185.856 378.88l233.984-177.152v354.816L479.232 510.464z"
-                          fill="#8a8a8a"
-                        />
-                      </svg>
-                    </Tooltip>
+                    <>
+                      <Tooltip content="打开 Playground ">
+                        <svg
+                          viewBox="0 0 1024 1024"
+                          width="18"
+                          height="18"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            const params = encode(
+                              JSON.stringify({
+                                tabs,
+                                code,
+                              }),
+                            );
+                            window.open(
+                              `${location.pathname}#/~playground?params=${params}`,
+                            );
+                          }}
+                        >
+                          <path
+                            d="M692.93164037 195.46982397l-277.93652293 255.5507815L259.66865209 333.94238281 195.47509766 371.30468725l153.10898437 140.69267628-153.10898437 140.69267553 64.19355443 37.47304662 155.32646535-117.07558543 277.93652293 255.44003856 135.59062551-65.85468725V261.32714844z m0 168.075v296.89453175l-197.01298803-148.45253957z"
+                            fill="#8a8a8a"
+                          />
+                        </svg>
+                      </Tooltip>
+                      <Tooltip content="新窗口预览">
+                        <svg
+                          viewBox="0 0 1024 1024"
+                          width="16"
+                          height="16"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            const params = encode(
+                              JSON.stringify({
+                                code,
+                                tabs,
+                                previewOnly: true,
+                              }),
+                            );
+                            window.open(
+                              `${location.pathname}#/~playground?params=${params}`,
+                            );
+                          }}
+                        >
+                          <path
+                            d="M810.666667 810.666667H213.333333V213.333333h298.666667V128H213.333333c-47.146667 0-85.333333 38.186667-85.333333 85.333333v597.333334c0 47.146667 38.186667 85.333333 85.333333 85.333333h597.333334c47.146667 0 85.333333-38.186667 85.333333-85.333333V512h-85.333333v298.666667zM597.333333 128v85.333333h152.96L330.88 632.746667l60.373333 60.373333L810.666667 273.706667V426.666667h85.333333V128H597.333333z"
+                            fill="#8a8a8a"
+                          />
+                        </svg>
+                      </Tooltip>
+                    </>
                   );
                 }}
               />
