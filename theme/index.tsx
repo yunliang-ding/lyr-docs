@@ -5,7 +5,6 @@ import Layout from './layouts/index';
 import ErrorBoundary from './error-boundary';
 import Playground from './playground';
 import router from '@/.lyr/router';
-import ConfigProps from 'lyr';
 import './global.less';
 
 const App = () => {
@@ -42,8 +41,4 @@ interface AppProps {
 
 export const runApp = async ({ element = '#root' }: AppProps) => {
   ReactDom.render(<App />, document.querySelector(element));
-};
-
-export const defineConfig = (props: ConfigProps) => {
-  return props;
 };
