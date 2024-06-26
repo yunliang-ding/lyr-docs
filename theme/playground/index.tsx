@@ -7,7 +7,11 @@ export default () => {
   const { params }: any = getUrlSearchParams(location.hash);
   const { tabs, code, previewOnly } = JSON.parse(decode(params));
   const dependencies = {};
-  tabs.forEach((key: string) => (dependencies[key] = source[key]));
+  tabs.forEach((key: string) => {
+    if (source[key]) {
+      dependencies[key] = source[key];
+    }
+  });
   return (
     <ReactPlayground
       showLogo
