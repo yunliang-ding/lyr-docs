@@ -1,14 +1,13 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { MarkdownViewer, encode } from 'lyr-extra';
 import MarkdownViewerSource from './markdown-viewer-source';
 import MarkdownViewerType from './markdown-viewer-type';
 import { Menu, BackTop, Tooltip } from '@arco-design/web-react';
 import { IconCaretUp } from '@arco-design/web-react/icon';
-import uiStore from './store/ui';
 
 export default ({ github, updateTime, ...rest }: any) => {
   const [, setReload] = useState(Math.random());
-  const { dark } = uiStore.useSnapshot();
+  const mdRef: any = useRef({});
   const defaultSelectedKeys = decodeURIComponent(location.hash.split('#')[2]);
   useEffect(() => {
     if (defaultSelectedKeys) {
@@ -40,6 +39,7 @@ export default ({ github, updateTime, ...rest }: any) => {
             () => (
               <MarkdownViewer
                 {...rest}
+                ref={mdRef}
                 source={MarkdownViewerSource}
                 typesAPI={MarkdownViewerType}
                 extraRender={({ tabs, code }: any) => {
