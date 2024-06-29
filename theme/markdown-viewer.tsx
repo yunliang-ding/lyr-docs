@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { MarkdownViewer, encode } from 'lyr-extra';
 import MarkdownViewerSource from './markdown-viewer-source';
 import MarkdownViewerType from './markdown-viewer-type';
@@ -8,11 +8,7 @@ import uiStore from './store/ui';
 
 export default ({ github, updateTime, ...rest }: any) => {
   const [, setReload] = useState(Math.random());
-  const mdRef: any = useRef({});
   const { dark } = uiStore.useSnapshot();
-  useEffect(() => {
-    mdRef.current.setTheme?.(dark ? 'dark-plus' : 'light-plus');
-  }, [dark]);
   const defaultSelectedKeys = decodeURIComponent(location.hash.split('#')[2]);
   useEffect(() => {
     if (defaultSelectedKeys) {
@@ -44,10 +40,8 @@ export default ({ github, updateTime, ...rest }: any) => {
             () => (
               <MarkdownViewer
                 {...rest}
-                theme={dark ? 'dark-plus' : 'light-plus'}
                 source={MarkdownViewerSource}
                 typesAPI={MarkdownViewerType}
-                ref={mdRef}
                 extraRender={({ tabs, code }: any) => {
                   return (
                     <>
