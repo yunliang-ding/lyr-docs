@@ -11,7 +11,7 @@ export default ({ github, updateTime, ...rest }: any) => {
   const mdRef: any = useRef({});
   const { dark } = uiStore.useSnapshot();
   useEffect(() => {
-    mdRef.current.setTheme?.(dark ? 'dark' : 'light');
+    mdRef.current.setTheme?.(dark ? 'dark-plus' : 'light-plus');
   }, [dark]);
   const defaultSelectedKeys = decodeURIComponent(location.hash.split('#')[2]);
   useEffect(() => {
@@ -44,7 +44,7 @@ export default ({ github, updateTime, ...rest }: any) => {
             () => (
               <MarkdownViewer
                 {...rest}
-                codeTheme={dark ? 'dark' : 'light'}
+                theme={dark ? 'dark-plus' : 'light-plus'}
                 source={MarkdownViewerSource}
                 typesAPI={MarkdownViewerType}
                 ref={mdRef}
