@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React, { useEffect, useRef } from 'react';
 import { AppLayout } from 'lyr-component';
-import { asyncLoadLink } from 'lyr-extra';
 import uiStore from '../store/ui';
 import menus from '@/.lyr/menus';
 import navs from '@/.lyr/navs';
@@ -62,11 +61,6 @@ export default () => {
       }
       dark={dark}
       onDarkChange={async (dark: boolean) => {
-        await asyncLoadLink(
-          `https://lyr-cli-oss.oss-cn-beijing.aliyuncs.com/cdn/highlight.atom-one-${
-            dark ? 'dark' : 'light'
-          }.min.css`,
-        );
         uiStore.dark = dark;
       }}
       menu={{
